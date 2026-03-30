@@ -4,7 +4,18 @@ namespace TmxProcessorLib;
 
 public class Tilemap
 {
-    public List<int[,]> drawLayers;
+    public string TilesetName;
+
+    public List<int[,]> drawLayers = new();
     public int[,] collisionLayer;
-    public int[,] interactionLayer;
+    public int[,] mechanicsLayer;
+    public int[,] interactionsLayer;
+
+    public int width;
+    public int height;
+
+    public int tileWidth = 16;
+    public int tileHeight = 16;
+
+    public int aboveEntityIndex = -1;
 }
