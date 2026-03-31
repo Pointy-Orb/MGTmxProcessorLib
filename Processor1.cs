@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using TInput = System.Xml.Linq.XDocument;
 using TOutput = TmxProcessorLib.Tilemap;
@@ -73,6 +74,10 @@ public class Processor1 : ContentProcessor<TInput, TOutput>
             {
                 tilemap.aboveEntityIndex = index;
             }
+            if (element.Name == "property" && element.Attribute("name").Value == "InteractionsKey")
+            {
+                tilemap.InteractionsKey = element.Attribute("value").Value;
+            }
             if (element.Name == "tileset")
             {
                 var source = element.Attribute("source");
@@ -134,10 +139,13 @@ public class Processor1 : ContentProcessor<TInput, TOutput>
                     for (int j = 0; j < csvNums.Length; j++)
                     {
                         int id;
-                        if (!int.TryParse(csvNums[j], out id))
+                        uint rawID;
+                        if (!UInt32.TryParse(csvNums[j], out rawID))
                         {
                             continue;
                         }
+                        id = (int)(rawID << 3);
+                        id = id >> 3;
                         bool metaID = false;
                         for (int l = 0; l < startingIds.Count; l++)
                         {
@@ -163,6 +171,17 @@ public class Processor1 : ContentProcessor<TInput, TOutput>
                         {
                             continue;
                         }
+                        bool horizontalFlip = (rawID >> 31 & 1) == 1;
+                        bool verticalFlip = (rawID >> 30 & 1) == 1;
+                        bool diagonalFlip = (rawID >> 29 & 1) == 1;
+                        if (verticalFlip || horizontalFlip || diagonalFlip)
+                        {
+                            tilemap.rotationData.Add(
+                                new Vector3(tilemap.drawLayers.Count, j, i),
+                                new RotationData(verticalFlip, horizontalFlip, diagonalFlip)
+                            );
+                        }
+
                         drawLayer[j, i] = id - 1;
                         if (id > 0)
                         {

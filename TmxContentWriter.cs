@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -17,6 +18,14 @@ public class TmxContentWriter : ContentTypeWriter<PInput>
     protected override void Write(ContentWriter output, PInput value)
     {
         output.Write(value.TilesetName);
+        if (string.IsNullOrEmpty(value.InteractionsKey))
+        {
+            output.Write("NULL");
+        }
+        else
+        {
+            output.Write(value.InteractionsKey);
+        }
         output.Write(value.width);
         output.Write(value.height);
         output.Write(value.tileWidth);
@@ -35,6 +44,22 @@ public class TmxContentWriter : ContentTypeWriter<PInput>
                     output.Write((byte)i);
                     output.Write((byte)j);
                     output.Write((short)value.drawLayers[l][i, j]);
+                    if (value.rotationData.TryGetValue(new Vector3(l, i, j), out var rotDataRaw))
+                    {
+                        output.Write(sbyte.MinValue);
+                        BitArray rotDataArray = new(
+                            new bool[]
+                            {
+                                rotDataRaw.horizontalFlip,
+                                rotDataRaw.verticalFlip,
+                                rotDataRaw.diagonalFlip,
+                            }
+                        );
+                        byte[] bytes = new byte[1];
+                        rotDataArray.CopyTo(bytes, 0);
+                        byte rotData = bytes[0];
+                        output.Write(rotData);
+                    }
                     //output.Write(new Vector4(l, i, j, value.drawLayers[l][i, j]));
                 }
             }
