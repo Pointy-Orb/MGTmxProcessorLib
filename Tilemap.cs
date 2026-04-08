@@ -14,6 +14,7 @@ public class Tilemap
     public int[,] interactionsLayer;
 
     public Dictionary<Vector3, RotationData> rotationData = new();
+    internal List<EnemySpawner> enemySpawners = new();
 
     public int width;
     public int height;

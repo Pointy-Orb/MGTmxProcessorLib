@@ -124,5 +124,33 @@ public class TmxContentWriter : ContentTypeWriter<PInput>
         output.Write(byte.MaxValue);
         output.Write((short)-1);
         output.Write((short)value.aboveEntityIndex);
+
+        WriteObjects(output, value);
+    }
+
+    private void WriteObjects(ContentWriter output, PInput value)
+    {
+        output.Write((ushort)value.enemySpawners.Count);
+        for (int i = 0; i < value.enemySpawners.Count; i++)
+        {
+            var spawner = value.enemySpawners[i];
+            output.Write(spawner.x);
+            output.Write(spawner.y);
+            output.Write(spawner.width);
+            output.Write(spawner.height);
+            output.Write(spawner.attemptInterval);
+            output.Write(spawner.attemptSuccessFraction);
+            output.Write((ushort)spawner.enemies.Count);
+            for (int j = 0; j < spawner.enemies.Count; j++)
+            {
+                var enemy = spawner.enemies[j];
+                output.Write(enemy.type);
+                output.Write((ushort)enemy.battleEnemies.Count);
+                for (int k = 0; k < enemy.battleEnemies.Count; k++)
+                {
+                    output.Write(enemy.battleEnemies[k]);
+                }
+            }
+        }
     }
 }
