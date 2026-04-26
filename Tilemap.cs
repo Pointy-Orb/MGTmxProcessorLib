@@ -23,6 +23,9 @@ public class Tilemap
     public int tileHeight = 16;
 
     public int aboveEntityIndex = -1;
+
+    public bool hasProceduralEntrance = false;
+    public int proceduralExitNum = 0;
 }
 
 public struct RotationData

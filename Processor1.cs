@@ -101,10 +101,7 @@ public class Processor1 : ContentProcessor<TInput, TOutput>
             );
             tilemap.TilesetName = prunedName;
         }
-        if (startingIds.Count == Enum.GetValues(typeof(MetaIDs)).Length)
-        {
-            startingIds.Sort((left, right) => right.Item1.CompareTo(left.Item1));
-        }
+        startingIds.Sort((left, right) => right.Item1.CompareTo(left.Item1));
     }
 
     private void ProcessLayer(Tilemap tilemap, XElement element, List<(int, MetaIDs)> startingIds)
@@ -147,7 +144,8 @@ public class Processor1 : ContentProcessor<TInput, TOutput>
                                 tilemap.collisionLayer[j, i] = id - startingIds[l].Item1;
                                 break;
                             case MetaIDs.Mechanics:
-                                tilemap.mechanicsLayer[j, i] = id - startingIds[l].Item1;
+                                int mechanicID = id - startingIds[l].Item1;
+                                tilemap.mechanicsLayer[j, i] = mechanicID;
                                 break;
                             case MetaIDs.Interactions:
                                 tilemap.interactionsLayer[j, i] = id - startingIds[l].Item1;
