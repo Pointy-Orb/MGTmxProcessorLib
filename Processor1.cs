@@ -47,6 +47,10 @@ public class Processor1 : ContentProcessor<TInput, TOutput>
             {
                 tilemap.InteractionsKey = element.Attribute("value").Value;
             }
+            if (element.Name == "property" && element.Attribute("name").Value == "Unflippable")
+            {
+                tilemap.Unflippable = element.Attribute("value").Value == "true";
+            }
 
             if (element.Name == "tileset")
             {

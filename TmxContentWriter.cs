@@ -26,6 +26,7 @@ public class TmxContentWriter : ContentTypeWriter<PInput>
         {
             output.Write(value.InteractionsKey);
         }
+        output.Write(value.Unflippable);
         output.Write(value.width);
         output.Write(value.height);
         output.Write(value.tileWidth);

@@ -7,6 +7,7 @@ public class Tilemap
 {
     public string TilesetName;
     public string InteractionsKey;
+    public bool Unflippable = false;
 
     public List<int[,]> drawLayers = new();
     public int[,] collisionLayer;
